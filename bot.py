@@ -105,6 +105,20 @@ MENTAL_HEALTH_TIPS = [
     ("One genuine connection", "Send a text to one person you actually like — no agenda, just a check-in. Social connection is one of the most underrated mood regulators we have."),
 ]
 
+# --- Quick dopamine hacks for /dopaminefarm ---
+DOPAMINE_HACKS = [
+    ("Eat something sour", "Pop a sour candy or bite into a lemon wedge. The shock triggers an immediate alertness response and a small dopamine hit."),
+    ("Cold water on your face", "Splash cold water on your face or run your wrists under cold tap water for 30 seconds. Fast mood reset."),
+    ("Win a tiny game", "Beat one level of a mobile game, solve a mini crossword, or win a quick chess puzzle. Small victories count."),
+    ("Play a hype song", "Put on the one song that always gets you going. Full volume. Let it hit before going back to whatever you were doing."),
+    ("Cross something off a list", "Write down one thing you already did today, then cross it off. Your brain doesn't know the difference — it still releases dopamine."),
+    ("Do 10 jumping jacks", "Short bursts of movement spike dopamine and norepinephrine fast. 10 reps is enough to feel it."),
+    ("Send a compliment", "Text or message someone a genuine one-line compliment. Giving feels good too — social reward is real."),
+    ("Eat a piece of dark chocolate", "Dark chocolate triggers a small dopamine and serotonin release. One square is enough."),
+    ("Nail a small task under 2 minutes", "Pick anything — reply to one email, wipe a surface, refill your water. Completion is the hit."),
+    ("Watch one hype clip", "A 60-second highlight reel, a funny moment, a clip that always fires you up. One clip, then close it."),
+]
+
 # --- Mental models for /leverage ---
 MENTAL_MODELS = [
     ("Second-order thinking", "Consider not just the immediate effect of a decision, but the effects of those effects."),
@@ -194,6 +208,19 @@ async def mentalhelp(interaction: discord.Interaction):
         await asyncio.sleep(random.uniform(1, 3))
     name, description = random.choice(MENTAL_HEALTH_TIPS)
     await interaction.followup.send(f"🌿 **{name}**\n{description}")
+
+
+# --- /dopaminefarm: random quick dopamine hack ---
+@bot.tree.command(name="dopaminefarm", description="Get a random quick dopamine hack.")
+async def dopaminefarm(interaction: discord.Interaction):
+    await interaction.response.defer()
+    if interaction.channel:
+        async with interaction.channel.typing():
+            await asyncio.sleep(random.uniform(1, 3))
+    else:
+        await asyncio.sleep(random.uniform(1, 3))
+    name, description = random.choice(DOPAMINE_HACKS)
+    await interaction.followup.send(f"⚡ **{name}**\n{description}")
 
 
 # --- /leverage: random mental model ---
