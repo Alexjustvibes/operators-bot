@@ -19,8 +19,8 @@ except ImportError:
 
 # --- Configuration: put your token in .env as BOT_TOKEN=your_token_here ---
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-# Channel ID for the background philosophy announcements (set to your channel's ID, or None to disable)
-ANNOUNCEMENT_CHANNEL_ID = 1364423221314846802  # e.g. 123456789012345678
+# Channel IDs for background philosophy announcements
+ANNOUNCEMENT_CHANNEL_IDS = [1364423221314846802, 1386443543190573106]
 
 # --- Tarot cards: name + short meaning (beginner-friendly list) ---
 TAROT_CARDS = [
@@ -139,15 +139,16 @@ intents.message_content = True  # needed to read message content (e.g. for @ment
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-# --- Background task: send a random philosophy quote to the announcement channel every 4–8 hours ---
+# --- Background task: send a random philosophy quote to all announcement channels every 4–8 hours ---
 @tasks.loop()
 async def philosophy_announcement():
     await bot.wait_until_ready()
     await asyncio.sleep(random.uniform(4 * 3600, 8 * 3600))  # 4–8 hours in seconds
-    if ANNOUNCEMENT_CHANNEL_ID:
-        channel = bot.get_channel(ANNOUNCEMENT_CHANNEL_ID)
+    quote = random.choice(PHILOSOPHY_REPLIES)
+    for channel_id in ANNOUNCEMENT_CHANNEL_IDS:
+        channel = bot.get_channel(channel_id)
         if channel:
-            await channel.send(random.choice(PHILOSOPHY_REPLIES))
+            await channel.send(quote)
 
 
 @bot.event
@@ -159,9 +160,9 @@ async def on_ready():
         print(f"Synced {len(synced)} command(s).")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
-    if ANNOUNCEMENT_CHANNEL_ID:
+    if ANNOUNCEMENT_CHANNEL_IDS:
         philosophy_announcement.start()
-        print(f"Philosophy announcement task started (channel ID: {ANNOUNCEMENT_CHANNEL_ID}).")
+        print(f"Philosophy announcement task started (channel IDs: {ANNOUNCEMENT_CHANNEL_IDS}).")
 
 
 # --- Tarot reading: pick 1–3 cards and show name + meaning ---
