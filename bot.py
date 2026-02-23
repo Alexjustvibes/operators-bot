@@ -91,6 +91,20 @@ JOURNALING_PROMPTS = [
     "What would you do if you weren't afraid of failing?",
 ]
 
+# --- Mental health tips & grounding exercises for /mentalhelp ---
+MENTAL_HEALTH_TIPS = [
+    ("5-4-3-2-1 Grounding", "Name **5 things you can see**, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste. This anchors you in the present moment."),
+    ("Box Breathing", "Inhale for **4 counts**, hold for 4, exhale for 4, hold for 4. Repeat 4 times. Slows your nervous system down fast."),
+    ("Body Scan", "Close your eyes and slowly move your attention from your feet to the top of your head. Notice tension without trying to fix it — just observe."),
+    ("Cold Water Reset", "Splash cold water on your face or hold ice in your hands for 30 seconds. It activates your dive reflex and quickly lowers a racing heart rate."),
+    ("The STOP Technique", "**S**top what you're doing. **T**ake a breath. **O**bserve — what are you thinking, feeling, sensing? **P**roceed with intention."),
+    ("Name the emotion", "Instead of saying 'I feel bad', try to name it precisely: 'I feel rejected', 'I feel overwhelmed', 'I feel embarrassed.' Specificity reduces intensity."),
+    ("Move your body", "Even 5 minutes of movement — a walk, stretching, shaking your hands out — shifts your body chemistry more reliably than most mental reframing."),
+    ("Shrink the task", "When everything feels like too much, ask: 'What's the smallest possible thing I could do right now?' Then do only that. Momentum is the point."),
+    ("Limit doom loops", "Set a timer for 10 minutes if you need to worry or ruminate. When it goes off, consciously redirect. You honored the feeling; now move on."),
+    ("One genuine connection", "Send a text to one person you actually like — no agenda, just a check-in. Social connection is one of the most underrated mood regulators we have."),
+]
+
 # --- Mental models for /leverage ---
 MENTAL_MODELS = [
     ("Second-order thinking", "Consider not just the immediate effect of a decision, but the effects of those effects."),
@@ -167,6 +181,19 @@ async def reflect(interaction: discord.Interaction):
         await asyncio.sleep(random.uniform(1, 3))
     prompt = random.choice(JOURNALING_PROMPTS)
     await interaction.followup.send(f"📔 **Reflect:**\n{prompt}")
+
+
+# --- /mentalhelp: random grounding exercise or mental health tip ---
+@bot.tree.command(name="mentalhelp", description="Get a random grounding exercise or mental health tip.")
+async def mentalhelp(interaction: discord.Interaction):
+    await interaction.response.defer()
+    if interaction.channel:
+        async with interaction.channel.typing():
+            await asyncio.sleep(random.uniform(1, 3))
+    else:
+        await asyncio.sleep(random.uniform(1, 3))
+    name, description = random.choice(MENTAL_HEALTH_TIPS)
+    await interaction.followup.send(f"🌿 **{name}**\n{description}")
 
 
 # --- /leverage: random mental model ---
